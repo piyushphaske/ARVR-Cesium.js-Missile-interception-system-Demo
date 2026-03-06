@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Missile Interception Simulator</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body, #cesiumContainer { width: 100%; height: 100%; overflow: hidden;
+      background: #000; font-family: 'Courier New', monospace; }
+
+    #hud {
+      position: absolute; top: 10px; left: 10px; z-index: 100;
+      background: rgba(0,20,40,0.85); border: 1px solid #00ffff;
+      color: #00ffff; padding: 16px; border-radius: 4px; min-width: 280px;
+      backdrop-filter: blur(6px);
+    }
+    #hud h2 { font-size: 13px; letter-spacing: 3px; color: #fff;
+      border-bottom: 1px solid #00ffff44; padding-bottom: 8px; margin-bottom: 12px; }
+    #hud .stat { display: flex; justify-content: space-between;
+      font-size: 12px; margin: 4px 0; }
+    #hud .stat span { color: #ffff00; }
+    #hud .log { margin-top: 12px; font-size: 11px; color: #aaffaa;
+      max-height: 120px; overflow-y: auto; border-top: 1px solid #00ffff33;
+      padding-top: 8px; }
+    #hud .log div { padding: 2px 0; border-left: 2px solid #00ffff44; padding-left: 6px; }
+
+    #controls {
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      z-index: 100; display: flex; flex-direction: column; align-items: center; gap: 8px;
+      background: rgba(0,20,40,0.88); border: 1px solid #00ffff44;
+      padding: 14px 18px; border-radius: 4px; backdrop-filter: blur(6px);
+    }
+    button {
+      background: rgba(0,20,40,0.9); border: 1px solid #00ffff;
+      color: #00ffff; padding: 10px 24px; cursor: pointer; font-family: inherit;
+      font-size: 13px; letter-spacing: 2px; border-radius: 2px;
+      transition: all 0.2s;
+    }
+    button:hover { background: #00ffff; color: #000; }
+    button:disabled { opacity: 0.3; cursor: not-allowed; }
+    button.danger { border-color: #ff4444; color: #ff4444; }
+    button.danger:hover { background: #ff4444; color: #fff; }
+    #region-selector { display: flex; gap: 6px; }
+    .region-btn {
+      border-color: #006688; color: #00aacc;
+      padding: 7px 13px; font-size: 11px; letter-spacing: 1px;
+    }
+    .region-btn.active { background: #00ffff; color: #000; border-color: #00ffff; }
+    #missile-selector { display: flex; align-items: center; gap: 8px; }
+    #missile-selector label { color: #888; font-size: 10px; letter-spacing: 2px; }
+    #missile-selector select {
+      background: rgba(0,20,40,0.9); border: 1px solid #00ffff44;
+      color: #00ffff; padding: 6px 10px; font-family: 'Courier New', monospace;
+      font-size: 12px; border-radius: 2px; cursor: pointer; outline: none;
+    }
+    #missile-selector select:focus { border-color: #00ffff; }
+    #action-btns { display: flex; gap: 12px; }
+
+    #status-bar {
+      position: absolute; top: 10px; right: 10px; z-index: 100;
+      background: rgba(0,20,40,0.85); border: 1px solid #00ffff;
+      color: #00ffff; padding: 10px 16px; border-radius: 4px; font-size: 12px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <div id="hud">
+    <h2>⚡ MISSILE DEFENSE SIM</h2>
+    <div class="stat">THREAT MISSILES <span id="stat-fired">0</span></div>
+    <div class="stat">INTERCEPTORS LAUNCHED <span id="stat-interceptors">0</span></div>
+    <div class="stat">HITS <span id="stat-hits">0</span></div>
+    <div class="stat">MISSES <span id="stat-misses">0</span></div>
+    <div class="stat">SUCCESS RATE <span id="stat-rate">—</span></div>
+    <div class="log" id="event-log"></div>
+  </div>
+  <div id="status-bar">SYSTEM STANDBY</div>
+  <div id="controls">
+    <div id="region-selector">
+      <button class="region-btn active" data-region="NK_SK">🇰🇵 NK / SK</button>
+      <button class="region-btn" data-region="IRAN_ISRAEL">☪ Iran / Israel</button>
+      <button class="region-btn" data-region="INDIA_PAKISTAN">🌙 India / Pakistan</button>
+    </div>
+    <div id="missile-selector">
+      <label>FROM</label>
+      <select id="sel-origin"></select>
+      <span style="color:#00ffff;font-size:18px">→</span>
+      <label>TO</label>
+      <select id="sel-target"></select>
+    </div>
+    <div id="action-btns">
+      <button id="btn-launch">🚀 FIRE THREAT</button>
+      <button id="btn-reset" class="danger">↺ RESET</button>
+    </div>
+  </div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
